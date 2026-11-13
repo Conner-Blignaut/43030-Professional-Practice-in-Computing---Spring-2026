@@ -18,4 +18,4 @@ RUN sed -i 's/\r$//' /app/.github/scripts/*.sh && \
     chmod +x /app/.github/scripts/entrypoint.sh /app/.github/scripts/update_readme.sh
 
 # Set the entrypoint to the entrypoint script
-ENTRYPOINT ["/app/.github/scripts/entrypoint.sh"]
+ENTRYPOINT ["bash", "/app/.github/scripts/entrypoint.sh"]
