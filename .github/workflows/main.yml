@@ -12,17 +12,28 @@ jobs:
   update_html_readme:
     runs-on: ubuntu-latest
     steps:
+      # Step 1: Checkout
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      - name: Add update note to index.html
+      # Step 2: Update index.html based on who pushed
+      - name: Update index.html
         run: |
-          sed -i '/<\/body>/i <p>Updated by Team Leader on '"$(date)"'</p>' index.html
+          echo "Actor is: ${{ github.actor }}"
+          if [ "${{ github.actor }}" = "Conner-Blignaut" ]; then
+            sed -i '/<\/body>/i <p>Updated by Team Leader on '"$(date)"'</p>' index.html
+          fi
 
-      - name: Commit and push changes
+      # Step 3: Log to README.md
+      - name: Update README
         run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html
-          git commit -m "Auto-update index.html timestamp" || echo "No changes to commit"
-          git push
+          echo "### Updated by ${{ github.actor }} on $(date '+%Y-%m-%d %H:%M:%S') [Commit: $(git rev-parse --short HEAD)]" >> README.md
+
+      # Step 4: Commit and push
+      - name: Commit and Push Changes
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Workflow: Updated HTML and README for ${{ github.actor }}" || echo "No changes to commit"
+          git push origin main
