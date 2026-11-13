@@ -1,0 +1,14 @@
+name: 'Vowel Frequency Analyzer'
+description: 'Custom action to analyze vowels frequency.'
+
+inputs:
+  file:
+    description: 'The path to the text file to analyze (e.g., data.txt).'
+    required: true
+
+runs:
+  using: 'docker'
+  image: 'ghcr.io/georges034302/vowel-frequency-analyzer:latest'
+  entrypoint: ['/bin/bash', '/github/scripts/entrypoint.sh']
+  env:
+    FILE: ${{ inputs.file }}

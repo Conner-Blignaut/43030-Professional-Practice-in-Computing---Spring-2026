@@ -1,0 +1,2 @@
+This is sample raw data uploaded by a contributor.
+GitHub Actions with Docker will count the vowels in this file.

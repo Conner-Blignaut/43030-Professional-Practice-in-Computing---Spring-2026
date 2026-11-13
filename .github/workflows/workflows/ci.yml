@@ -1,0 +1,30 @@
+name: CI Workflow
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: |
+          docker build -t vowel-frequency-analyzer:latest .
+
+      - name: Run Docker container
+        run: |
+          docker run --rm \
+            -v "${{ github.workspace }}:/app" \
+            -e GITHUB_USER="${{ github.actor }}" \
+            -e GITHUB_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            -e GITHUB_REPOSITORY="${{ github.repository }}" \
+            vowel-frequency-analyzer:latest
